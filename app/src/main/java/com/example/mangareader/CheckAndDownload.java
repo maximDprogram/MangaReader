@@ -23,88 +23,85 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class CheckAndDownload extends AppCompatActivity {
-public String urltext;
-public int porttext;
-public String logintext;
-public String passwordtext;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_and_download);
-        ProgressBar progressBar = findViewById(R.id.progressBar);
-        EditText url = findViewById(R.id.editTextNumber);
-        EditText port = findViewById(R.id.editTextNumber1);
-        EditText login = findViewById(R.id.editTextNumber2);
-        EditText password = findViewById(R.id.editTextNumber3);
-        ImageView image = findViewById(R.id.imageView4);
+
+        ProgressBar progressBar = findViewById(R.id.progressBarConnect);
+
+        String dircheck = getExternalCacheDir()+"/Json";
+        String dircheckPic = getExternalCacheDir()+"/Pictures";
+
+        EditText url = findViewById(R.id.editTextUrl);
+        EditText port = findViewById(R.id.editTextPort);
+        EditText login = findViewById(R.id.editTextLogin);
+        EditText password = findViewById(R.id.editTextPassword);
+
+        ImageView image = findViewById(R.id.imageViewOffline);
+
+        String filePath = getExternalCacheDir() +"/Json"+"/completed.json";
+
+        String dircheckCbz = getExternalCacheDir()+"/Cbz";
+
+        File dir = new File(dircheck);
+        File file = new File(filePath);
+        File dirCbz = new File(dircheckCbz);
+        File dirPic = new File(dircheckPic);
 
         image.setOnClickListener(v -> {
             saveToJsonStatus(1);
 
-            String dircheck = getExternalCacheDir()+"/Json";
-            File dir = new File(dircheck);
             if (!dir.exists()) {
-                File dirPdf = new File(dircheck);
-                dirPdf.mkdir();
+                dir.mkdir();
             }
-
-            String filePath = getExternalCacheDir() +"/Json"+"/completed.json";
-
-            File file = new File(filePath);
 
             if (!file.exists()) {
-
-                Intent intentPdf = new Intent(CheckAndDownload.this, ErrorActivity.class);
-                startActivity(intentPdf);
-
+                startErrorActivity();
             }
             else {
-                Intent intentPdf1 = new Intent(CheckAndDownload.this, MainActivity.class);
-                startActivity(intentPdf1);
+                startMainActivity();
             }
         });
 
 
         progressBar.setOnClickListener(v -> {
-            String dircheck = getExternalCacheDir()+"/Cbz";
-            File dir = new File(dircheck);
+
+            int porttext;
+
+            String urltext = url.getText().toString();
+            String logintext = login.getText().toString();
+            String passwordtext = password.getText().toString();
+            String portcheck = port.getText().toString();
+
+            if (!dirCbz.exists()) {
+                dirCbz.mkdir();
+            }
+
+            if (!dirPic.exists()) {
+                dirPic.mkdir();
+            }
+
             if (!dir.exists()) {
-                File dirPdf = new File(dircheck);
-                dirPdf.mkdir();
-            }
-
-            String dircheck1 = getExternalCacheDir()+"/Pictures";
-            File dir1 = new File(dircheck1);
-            if (!dir1.exists()) {
-                File dirPictures = new File(dircheck1);
-                dirPictures.mkdir();
-            }
-
-            String dircheck2 = getExternalCacheDir()+"/Json";
-            File dir2 = new File(dircheck2);
-            if (!dir2.exists()) {
-                File dirPdf = new File(dircheck2);
-                dirPdf.mkdir();
+                dir.mkdir();
             }
 
             saveToJsonStatus(0);
-            urltext = url.getText().toString();
-            logintext = login.getText().toString();
-            passwordtext = password.getText().toString();
-            String portcheck = port.getText().toString();
+
             progressBar.setMax(100);
             progressBar.setProgress(0);
-
 
             if (portcheck.equals("")){
                 porttext = 21;
             }
             else {
-                porttext = Integer.parseInt(port.getText().toString());
+                porttext = Integer.parseInt(portcheck);
             }
 
             saveToJson(urltext,porttext, logintext, passwordtext);
@@ -114,26 +111,28 @@ public String passwordtext;
 
                     boolean status;
 
-                    status = downFile(urltext, porttext, logintext, passwordtext, "Json", "ongoings.json",getExternalCacheDir() + "/Json");
+                    status = downFile(urltext, porttext, logintext, passwordtext, "Json", "ongoings.json",dircheck);
 
-                    if (status == false){
+                    if (!status){
                         toast("Сервер недоступен");
                     }
                     else {
 
                         progressBar.setProgress(1);
 
-                        downFile(urltext, porttext, logintext, passwordtext, "Json", "completed.json",getExternalCacheDir() + "/Json");
+                        downFile(urltext, porttext, logintext, passwordtext, "Json", "completed.json",dircheck);
+
                         progressBar.setProgress(12);
 
                         progressBar.setProgress(24);
 
-                        Json("ongoings.json", "ongoings", urltext, porttext, logintext, passwordtext, 30);
-                        Json("completed.json", "completed", urltext, porttext, logintext, passwordtext, 60);
+                        Json(dircheckPic,dircheck,progressBar,"ongoings.json", "ongoings", urltext, porttext, logintext, passwordtext, 30);
+                        Json(dircheckPic,dircheck,progressBar,"completed.json", "completed", urltext, porttext, logintext, passwordtext, 60);
 
                         progressBar.setProgress(100);
-                        Intent intentPdf = new Intent(CheckAndDownload.this, MainActivity.class);
-                        startActivity(intentPdf);
+
+                        startMainActivity();
+
                         progressBar.setProgress(0);
 
                     }
@@ -168,7 +167,7 @@ public String passwordtext;
             if (!FTPReply.isPositiveCompletion(reply)) {
                 ftp.disconnect();
                 toast("Неверный логин или пароль");
-                return success;
+                return false;
             }
             ftp.changeWorkingDirectory (remotePath);
 
@@ -185,23 +184,32 @@ public String passwordtext;
             if (ftp.isConnected()) {
                 try {
                     ftp.disconnect();
-                } catch (IOException ioe) {
+                } catch (IOException ignored) {
                 }
             }
         }
         return success;
     }
 
-    private String JsonDataFromAsset(String fileName) {
-        String json = null;
-        File file = getExternalPath(fileName);
+    private void startErrorActivity() {
+        Intent intent = new Intent(CheckAndDownload.this, ErrorActivity.class);
+        startActivity(intent);
+    }
+
+    private void startMainActivity() {
+        Intent intent = new Intent(CheckAndDownload.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public static String JsonDataFromAsset(File file) {
+        String json;
         try {
             InputStream inputStream = new FileInputStream(file);
             int sizeOfFile = inputStream.available();
             byte[] bufferData = new byte[sizeOfFile];
             inputStream.read(bufferData);
             inputStream.close();
-            json = new String(bufferData, "UTF-8");
+            json = new String(bufferData, StandardCharsets.UTF_8);
         }catch (IOException e){
             e.printStackTrace();
             return null;
@@ -209,22 +217,16 @@ public String passwordtext;
         return json;
     }
 
-    private File getExternalPath(String fileName) {
-        return new File(this.getExternalCacheDir()+"/Json", fileName);
-    }
-
     final Handler h = new Handler();
     private void toast(final String Text) {
-        h.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), Text, Toast.LENGTH_SHORT).show();
-            }
-        });
+        h.post(() -> Toast.makeText(getApplicationContext(), Text, Toast.LENGTH_SHORT).show());
     }
 
 
-    private void Json(String filename,
+    private void Json(String dircheckPic,
+                      String dircheck,
+                      ProgressBar progressBar,
+                      String filename,
                       String name,
                       String urltext,
                       int porttext,
@@ -232,28 +234,23 @@ public String passwordtext;
                       String passwordtext,
                       int setprogress) {
         try {
-            JSONObject jsonObject = new JSONObject(JsonDataFromAsset(filename));
+            JSONObject jsonObject = new JSONObject(Objects.requireNonNull(JsonDataFromAsset(new File(dircheck, filename))));
             JSONArray jsonArray = jsonObject.getJSONArray(name);
-            ProgressBar progressBar = findViewById(R.id.progressBar);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject userData = jsonArray.getJSONObject(i);
-
-                File pic = new File(getExternalCacheDir() + "/Pictures/"+userData.getString("img"));
-                if(pic.exists()){
-                    progressBar.setProgress(setprogress + i * (30/jsonArray.length()));
-                }else{
-                    downFile(urltext, porttext, logintext, passwordtext, "Pictures", userData.getString("img"),getExternalCacheDir() + "/Pictures/");
-                    progressBar.setProgress(setprogress + i * (30/jsonArray.length()));
+                File pic = new File(dircheckPic+userData.getString("img"));
+                if (!pic.exists()) {
+                    downFile(urltext, porttext, logintext, passwordtext, "Pictures", userData.getString("img"), dircheckPic);
                 }
+                progressBar.setProgress(setprogress + i * (30/jsonArray.length()));
 
             }
         } catch (Exception e) {
-            Intent intent = new Intent(CheckAndDownload.this, ErrorActivity.class);
-            startActivity(intent);
+            startErrorActivity();
         }
     }
 
-    public void saveToJson(String url, int port, String login, String password){
+    private void saveToJson(String url, int port, String login, String password){
         JSONObject json = new JSONObject();
         try {
             json.put("url", url);
@@ -263,7 +260,7 @@ public String passwordtext;
 
             String jsonString = json.toString();
 
-            FileOutputStream fos = this.openFileOutput("jsonfile.json", this.MODE_PRIVATE);
+            FileOutputStream fos = this.openFileOutput("jsonfile.json", MODE_PRIVATE);
             fos.write(jsonString.getBytes());
             fos.close();
 
@@ -272,14 +269,14 @@ public String passwordtext;
         }
     }
 
-    public void saveToJsonStatus(int st){
+    private void saveToJsonStatus(int st){
         JSONObject json = new JSONObject();
         try {
             json.put("st", st);
 
             String jsonString = json.toString();
 
-            FileOutputStream fos = this.openFileOutput("jsonfile1.json", this.MODE_PRIVATE);
+            FileOutputStream fos = this.openFileOutput("jsonfile1.json", MODE_PRIVATE);
             fos.write(jsonString.getBytes());
             fos.close();
 
@@ -287,5 +284,4 @@ public String passwordtext;
             e.printStackTrace();
         }
     }
-
 }

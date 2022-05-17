@@ -28,12 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class ActivityManga extends AppCompatActivity {
@@ -89,7 +86,7 @@ public class ActivityManga extends AppCompatActivity {
                 int st = 1;
 
                 try {
-                    JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(JsonDataFromAsset("jsonfile1.json")));
+                    JSONObject jsonObject1 = new JSONObject(Objects.requireNonNull(CheckAndDownload.JsonDataFromAsset(getFileStreamPath("jsonfile1.json"))));
                     st = jsonObject1.getInt("st");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -104,7 +101,7 @@ public class ActivityManga extends AppCompatActivity {
 
                             boolean status = false;
                             try {
-                                JSONObject jsonObject = new JSONObject(Objects.requireNonNull(JsonDataFromAsset("jsonfile.json")));
+                                JSONObject jsonObject = new JSONObject(Objects.requireNonNull(CheckAndDownload.JsonDataFromAsset(getFileStreamPath("jsonfile.json"))));
                                 status = downFile(jsonObject.getString("url"), jsonObject.getInt("port"), jsonObject.getString("login"), jsonObject.getString("password"), "Cbz/" + getIntent().getStringExtra("mangaTitleOrig"), "ch 0 apter1.cbz", getExternalCacheDir() + "/Cbz/" + getIntent().getStringExtra("mangaTitleOrig") + "/");
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -144,7 +141,7 @@ public class ActivityManga extends AppCompatActivity {
 
     public void onBackPressed() { finish(); }
 
-    public boolean downFile(
+    private boolean downFile(
             String url, // имя хоста FTP-сервера
             int port, // порт FTP-сервера
             String username, // учетная запись FTP
@@ -236,23 +233,6 @@ public class ActivityManga extends AppCompatActivity {
             NotificationManager notificationManager = this.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-    }
-
-    private String JsonDataFromAsset(String fileName) {
-        String json;
-        File file = getFileStreamPath(fileName);
-        try {
-            InputStream inputStream = new FileInputStream(file);
-            int sizeOfFile = inputStream.available();
-            byte[] bufferData = new byte[sizeOfFile];
-            inputStream.read(bufferData);
-            inputStream.close();
-            json = new String(bufferData, StandardCharsets.UTF_8);
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
-        }
-        return json;
     }
 
     public static Bitmap decodeSampledBitmapFromResource(String res, int reqWidth, int reqHeight) {

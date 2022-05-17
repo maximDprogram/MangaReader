@@ -13,4 +13,12 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="server_connection">Подключение к серверу</string>
+    <string name="port">21</string>
+    <string name="login">ftp</string>
+    <string name="password">6534</string>
+    <string name="connect">Подключиться</string>
+    <string name="offline_mode">Автономный режим</string>
+    <string name="start_reading">Начать\nчтение</string>
+    <string name="сhapter_selection">Выбор\nглавы</string>
 </resources>

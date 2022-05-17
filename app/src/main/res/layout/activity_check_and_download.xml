@@ -8,77 +8,86 @@
     tools:context=".CheckAndDownload">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="80dp"
         android:textColor="@color/black"
-        android:textSize="25dp"
-        android:text="Подключение к серверу"
+        android:textSize="25sp"
+        android:text="@string/server_connection"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/editTextUrl"
         android:layout_width="295dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginTop="33dp"
-        android:gravity="center"
+        android:autofillHints=""
         android:ems="10"
-        android:textColor="@color/black"
+        android:gravity="center"
         android:inputType="date"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:ignore="LabelFor,TextFields" />
 
 
     <EditText
-        android:id="@+id/editTextNumber1"
+        android:id="@+id/editTextPort"
         android:layout_width="295dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginTop="25dp"
-        android:textColor="@color/black"
-        android:gravity="center"
+        android:autofillHints=""
         android:ems="10"
-        android:text="21"
+        android:gravity="center"
         android:inputType="number"
+        android:text="@string/port"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextUrl"
+        tools:ignore="LabelFor" />
 
 
     <EditText
-        android:id="@+id/editTextNumber2"
+        android:id="@+id/editTextLogin"
         android:layout_width="295dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginTop="25dp"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:text="ftp"
+        android:autofillHints=""
         android:ems="10"
+        android:gravity="center"
+        android:inputType="text"
+        android:text="@string/login"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber1" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPort"
+        tools:ignore="LabelFor" />
 
 
     <EditText
-        android:id="@+id/editTextNumber3"
+        android:id="@+id/editTextPassword"
         android:layout_width="295dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginTop="25dp"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:text="6534"
+        android:autofillHints=""
         android:ems="10"
+        android:gravity="center"
         android:inputType="textPassword"
+        android:text="@string/password"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber2" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextLogin"
+        tools:ignore="LabelFor" />
 
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBarConnect"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -88,25 +97,25 @@
         android:progressDrawable="@drawable/progressbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber3" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewConnect"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:paddingTop="9dp"
-        android:text="Подключиться"
+        android:text="@string/connect"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
-        app:layout_constraintEnd_toEndOf="@+id/progressBar"
-        app:layout_constraintStart_toStartOf="@+id/progressBar"
-        app:layout_constraintTop_toTopOf="@+id/progressBar" />
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarConnect"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarConnect"
+        app:layout_constraintStart_toStartOf="@+id/progressBarConnect"
+        app:layout_constraintTop_toTopOf="@+id/progressBarConnect" />
 
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/imageViewOffline"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="5dp"
@@ -119,20 +128,20 @@
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+        app:layout_constraintTop_toBottomOf="@+id/progressBarConnect" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textViewOffline"
         android:background="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:paddingTop="9dp"
-        android:text="Автономный режим"
+        android:text="@string/offline_mode"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-        app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:layout_constraintStart_toStartOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewOffline"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewOffline"
+        app:layout_constraintStart_toStartOf="@+id/imageViewOffline"
+        app:layout_constraintTop_toTopOf="@+id/imageViewOffline" />
 </androidx.constraintlayout.widget.ConstraintLayout>
