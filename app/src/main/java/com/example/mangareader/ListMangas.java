@@ -16,16 +16,8 @@ public class ListMangas {
         return chapter1;
     }
 
-    public void setChapter1(String chapter1) {
-        this.chapter1 = chapter1;
-    }
-
     public String getTitleOrig() {
         return titleOrig;
-    }
-
-    public void setTitleOrig(String titleOrig) {
-        this.titleOrig = titleOrig;
     }
 
     public int getId() {
@@ -38,9 +30,5 @@ public class ListMangas {
 
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 }
