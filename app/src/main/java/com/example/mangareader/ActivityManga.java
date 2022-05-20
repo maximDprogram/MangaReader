@@ -6,6 +6,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -102,7 +103,7 @@ public class ActivityManga extends AppCompatActivity {
                             boolean status = false;
                             try {
                                 JSONObject jsonObject = new JSONObject(Objects.requireNonNull(CheckAndDownload.JsonDataFromAsset(getFileStreamPath("jsonfile.json"))));
-                                status = downFile(jsonObject.getString("url"), jsonObject.getInt("port"), jsonObject.getString("login"), jsonObject.getString("password"), "Cbz/" + getIntent().getStringExtra("mangaTitleOrig"), "ch 0 apter1.cbz", getExternalCacheDir() + "/Cbz/" + getIntent().getStringExtra("mangaTitleOrig") + "/");
+                                status = downFile(ActivityManga.this,jsonObject.getString("url"), jsonObject.getInt("port"), jsonObject.getString("login"), jsonObject.getString("password"), "Cbz/" + getIntent().getStringExtra("mangaTitleOrig"), "ch 0 apter1.cbz", getExternalCacheDir() + "/Cbz/" + getIntent().getStringExtra("mangaTitleOrig") + "/");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -141,7 +142,8 @@ public class ActivityManga extends AppCompatActivity {
 
     public void onBackPressed() { finish(); }
 
-    private boolean downFile(
+    public static boolean downFile(
+            Context context,
             String url, // имя хоста FTP-сервера
             int port, // порт FTP-сервера
             String username, // учетная запись FTP
@@ -178,17 +180,17 @@ public class ActivityManga extends AppCompatActivity {
                     int percent = (int)(totalBytesTransferred*100/file.getSize());
 
                     if (percent % 25 == 0) {
-                        Notification(percent);
+                        Notification(context,percent);
                     }
                 }
 
             };
-            createNotificationChannel();
+            createNotificationChannel(context);
             ftp.setCopyStreamListener(streamListener);
             ftp.setFileType(FTP.BINARY_FILE_TYPE);
             ftp.retrieveFile(fileName, is);
             NotificationManagerCompat notificationManager =
-                    NotificationManagerCompat.from(this);
+                    NotificationManagerCompat.from(context);
             notificationManager.cancelAll();
             is.close();
             ftp.logout();
@@ -206,7 +208,7 @@ public class ActivityManga extends AppCompatActivity {
         return success;
     }
 
-    private void Notification(int percent) {
+    public static void Notification(Context context, int percent) {
 
         int NOTIFY_ID = 101;
 
@@ -214,23 +216,23 @@ public class ActivityManga extends AppCompatActivity {
 
 
         NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this, CHANNEL_ID)
+                new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(android.R.drawable.stat_sys_download)
                         .setContentTitle("Загрузка главы")
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setProgress(100,percent,false);
 
         NotificationManagerCompat notificationManager =
-                NotificationManagerCompat.from(this);
+                NotificationManagerCompat.from(context);
         notificationManager.notify(NOTIFY_ID, builder.build());
     }
 
-    private void createNotificationChannel() {
+    public static void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("channel", "Загрузка", importance);
             channel.setDescription("глава");
-            NotificationManager notificationManager = this.getSystemService(NotificationManager.class);
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }

@@ -156,7 +156,6 @@ public class CheckAndDownload extends AppCompatActivity {
             String localPath // Путь к локальному сохранению после загрузки
     ) {
 
-        boolean success = false;
         FTPClient ftp = new FTPClient();
         ftp.setConnectTimeout(1000);
         try {
@@ -177,7 +176,6 @@ public class CheckAndDownload extends AppCompatActivity {
             ftp.retrieveFile(fileName, is);
             is.close();
             ftp.logout();
-            success = true;
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -188,7 +186,7 @@ public class CheckAndDownload extends AppCompatActivity {
                 }
             }
         }
-        return success;
+        return true;
     }
 
     private void startErrorActivity() {

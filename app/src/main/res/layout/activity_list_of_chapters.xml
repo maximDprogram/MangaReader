@@ -7,23 +7,23 @@
     android:background="#cbf3f0">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/list_of_chapters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Список глав"
+        android:text="@string/list_of_chapters"
         android:gravity="center"
         android:textColor="@color/black"
-        android:textSize="30dp"
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="43dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/list_of_chapters"
         app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteX="0dp">
 
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+            app:layout_constraintTop_toBottomOf="@+id/list_of_chapters" />
 
     </ScrollView>
 
@@ -43,18 +43,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="190dp"
         android:gravity="center"
-        android:text="Главы \nне найдены"
+        android:text="@string/сhapters_not_found"
         android:textColor="@color/black"
         android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="@+id/scrollView2"
-        app:layout_constraintTop_toTopOf="@+id/scrollView2" />
+        app:layout_constraintEnd_toEndOf="@+id/scrollView"
+        app:layout_constraintTop_toTopOf="@+id/scrollView" />
 
     <TextView
         android:id="@+id/view_chapters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="Показать скачанные главы"
+        android:text="@string/show_downloaded_chapters"
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="20sp"
