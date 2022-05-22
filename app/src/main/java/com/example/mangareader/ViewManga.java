@@ -18,24 +18,12 @@ public class ViewManga {
         return chapter1;
     }
 
-    public void setChapter1(String chapter1) {
-        this.chapter1 = chapter1;
-    }
-
     public String getTitleOrig() {
         return titleOrig;
     }
 
-    public void setTitleOrig(String titleOrig) {
-        this.titleOrig = titleOrig;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getId() {
@@ -50,15 +38,7 @@ public class ViewManga {
         return img;
     }
 
-    public void setImg(String img) {
-        this.img = img;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 }

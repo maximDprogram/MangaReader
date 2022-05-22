@@ -25,18 +25,13 @@ public class MainActivity extends AppCompatActivity {
     Animation animFlipInBackward;
     Animation animFlipOutBackward;
 
-    private TabLayout tableLayout;
-    private ViewPager viewPager;
-    private LottieAnimationView lottieAnimationView;
-    private LottieAnimationView lottieAnimationView1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+        setContentView(R.layout.activity_main);
 
-        lottieAnimationView = findViewById(R.id.animationView2);
-        lottieAnimationView1 = findViewById(R.id.animationView1);
+        LottieAnimationView lottieAnimationView = findViewById(R.id.animationView2);
+        LottieAnimationView lottieAnimationView1 = findViewById(R.id.animationView1);
         ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) lottieAnimationView1.getLayoutParams();
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) lottieAnimationView.getLayoutParams();
         final float scale = this.getResources().getDisplayMetrics().density;
@@ -55,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         animFlipOutBackward = AnimationUtils.loadAnimation(this,
                 R.anim.flipout_reverse1);
 
-        tableLayout = findViewById(R.id.tablemain);
-        viewPager = findViewById(R.id.viewpager);
+        TabLayout tableLayout = findViewById(R.id.tablemain);
+        ViewPager viewPager = findViewById(R.id.viewpager);
 
         tableLayout.setupWithViewPager(viewPager);
 
@@ -64,10 +59,6 @@ public class MainActivity extends AppCompatActivity {
         vpAdapter.addFragment(new Fragment1(), "Онгоинги");
         vpAdapter.addFragment(new Fragment2(), "Завершенные");
         viewPager.setAdapter(vpAdapter);
-
-
-
-
     }
 
     public void onBackPressed() {
@@ -105,5 +96,4 @@ public class MainActivity extends AppCompatActivity {
 
     GestureDetector gestureDetector = new GestureDetector(getBaseContext(),
             simpleOnGestureListener);
-
 }

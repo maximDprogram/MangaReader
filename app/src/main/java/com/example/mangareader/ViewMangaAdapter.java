@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,20 +39,13 @@ public class ViewMangaAdapter extends RecyclerView.Adapter<ViewMangaAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewMangaViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-
-
         String imageViewPath = context.getExternalCacheDir()+"/Pictures/"+viewMangas.get(position).getImg();
 
         class MyThread extends Thread {
             public void run() {
-                Bitmap imageView = decodeSampledBitmapFromResource(imageViewPath, 400, 566);
+                Bitmap imageView = ActivityManga.decodeSampledBitmapFromResource(imageViewPath, 400, 566);
                 Handler handler = new Handler(context.getMainLooper());
-                handler.post( new Runnable() {
-                    @Override
-                    public void run() {
-                        holder.mangaImage.setImageBitmap(imageView);
-                    }
-                } );
+                handler.post(() -> holder.mangaImage.setImageBitmap(imageView));
             }
         }
         MyThread myThread = new MyThread();
@@ -101,37 +93,4 @@ public class ViewMangaAdapter extends RecyclerView.Adapter<ViewMangaAdapter.View
 
         }
     }
-
-    public static Bitmap decodeSampledBitmapFromResource(String res, int reqWidth, int reqHeight) {
-
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(res, options);
-
-
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(res, options);
-    }
-
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int heightRatio = Math.round((float) height / (float) reqHeight);
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-        }
-
-        return inSampleSize;
-    }
-
 }

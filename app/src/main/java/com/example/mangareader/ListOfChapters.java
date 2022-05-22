@@ -16,9 +16,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -179,21 +176,34 @@ public class ListOfChapters extends AppCompatActivity {
         }
     }
 
-    private String[] Sort(String[] list){
+    public String[] Sort(String[] list){
+        int y = list.length;
+        String[] listtest;
+        double[] listtesttest = new double[y];
+        for (int i = 0; i<y; i++) {
+            listtest = list[i].split(" ");
+            listtesttest[i] = Double.parseDouble((listtest[1]));
+        }
 
-        List<String> arr1 = new ArrayList<>(Arrays.asList(list));
-        Collections.sort(arr1,new Comparator<String>() {
-            public int compare(String o1, String o2) {
-                return extractInt(o1) - extractInt(o2);
+        int gap = listtesttest.length / 2;
+
+        while (gap >= 1) {
+            for (int right = 0; right < listtesttest.length; right++) {
+
+                for (int c = right - gap; c >= 0; c -= gap) {
+                    if (listtesttest[c] > listtesttest[c + gap]) {
+                        double tmp = listtesttest[c];
+                        String tmp1 = list[c];
+                        listtesttest[c] = listtesttest[c + gap];
+                        list[c] = list[c + gap];
+                        listtesttest[c + gap] = tmp;
+                        list[c + gap] = tmp1;
+                    }
+                }
             }
 
-            int extractInt(String s) {
-                String num = s.replaceAll("\\D", " ");
-                String[] nm = num.split("    ");
-                String[] nm1 = nm[1].split(" ");
-                return num.isEmpty() ? 0 : Integer.parseInt(nm1[2]);
-            }
-        });
-        return arr1.toArray(new String[0]);
+            gap = gap / 2;
+        }
+        return list;
     }
 }
