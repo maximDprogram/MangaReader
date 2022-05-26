@@ -24,4 +24,6 @@
     <string name="сhapters_not_found">Главы \nне найдены</string>
     <string name="show_downloaded_chapters">Показать скачанные главы</string>
     <string name="list_of_chapters">Список глав</string>
+    <string name="ongoings">Онгоинги</string>
+    <string name="completed">Завершенные</string>
 </resources>
