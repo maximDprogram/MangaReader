@@ -36,7 +36,8 @@ public class CheckAndDownload extends AppCompatActivity {
         ProgressBar progressBar = findViewById(R.id.progressBarConnect);
 
         String dircheck = getExternalCacheDir()+"/Json";
-        String dircheckPic = getExternalCacheDir()+"/Pictures";
+        String dircheckPic400 = getExternalCacheDir()+"/Pictures400/";
+        String dircheckPic800 = getExternalCacheDir()+"/Pictures800/";
 
         EditText url = findViewById(R.id.editTextUrl);
         EditText port = findViewById(R.id.editTextPort);
@@ -52,7 +53,8 @@ public class CheckAndDownload extends AppCompatActivity {
         File dir = new File(dircheck);
         File file = new File(filePath);
         File dirCbz = new File(dircheckCbz);
-        File dirPic = new File(dircheckPic);
+        File dirPic400 = new File(dircheckPic400);
+        File dirPic800 = new File(dircheckPic800);
 
         image.setOnClickListener(v -> {
             saveToJsonStatus(1);
@@ -83,8 +85,12 @@ public class CheckAndDownload extends AppCompatActivity {
                 dirCbz.mkdir();
             }
 
-            if (!dirPic.exists()) {
-                dirPic.mkdir();
+            if (!dirPic400.exists()) {
+                dirPic400.mkdir();
+            }
+
+            if (!dirPic800.exists()) {
+                dirPic800.mkdir();
             }
 
             if (!dir.exists()) {
@@ -125,8 +131,8 @@ public class CheckAndDownload extends AppCompatActivity {
 
                         progressBar.setProgress(24);
 
-                        Json(dircheckPic,dircheck,progressBar,"ongoings.json", "ongoings", urltext, porttext, logintext, passwordtext, 30);
-                        Json(dircheckPic,dircheck,progressBar,"completed.json", "completed", urltext, porttext, logintext, passwordtext, 60);
+                        Json(dircheckPic800,dircheckPic400,dircheck,progressBar,"ongoings.json", "ongoings", urltext, porttext, logintext, passwordtext, 30);
+                        Json(dircheckPic800,dircheckPic400,dircheck,progressBar,"completed.json", "completed", urltext, porttext, logintext, passwordtext, 60);
 
                         progressBar.setProgress(100);
 
@@ -156,7 +162,7 @@ public class CheckAndDownload extends AppCompatActivity {
     ) {
         boolean success = false;
         FTPClient ftp = new FTPClient();
-        ftp.setConnectTimeout(1000);
+        ftp.setConnectTimeout(100);
         try {
             int reply;
             ftp.connect(url, port);
@@ -221,7 +227,8 @@ public class CheckAndDownload extends AppCompatActivity {
     }
 
 
-    private void Json(String dircheckPic,
+    private void Json(String dircheckPic800,
+                      String dircheckPic400,
                       String dircheck,
                       ProgressBar progressBar,
                       String filename,
@@ -236,9 +243,13 @@ public class CheckAndDownload extends AppCompatActivity {
             JSONArray jsonArray = jsonObject.getJSONArray(name);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject userData = jsonArray.getJSONObject(i);
-                File pic = new File(dircheckPic+userData.getString("img"));
-                if (!pic.exists()) {
-                    downFile(urltext, porttext, logintext, passwordtext, "Pictures", userData.getString("img"), dircheckPic);
+                File pic400 = new File(dircheckPic400+userData.getString("img"));
+                if (!pic400.exists()) {
+                    downFile(urltext, porttext, logintext, passwordtext, "Pictures400", userData.getString("img"), dircheckPic400);
+                }
+                File pic800 = new File(dircheckPic800+userData.getString("img"));
+                if (!pic800.exists()) {
+                    downFile(urltext, porttext, logintext, passwordtext, "Pictures800", userData.getString("img"), dircheckPic800);
                 }
                 progressBar.setProgress(setprogress + i * (30/jsonArray.length()));
 

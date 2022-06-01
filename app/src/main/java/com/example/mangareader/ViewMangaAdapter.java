@@ -3,7 +3,7 @@ package com.example.mangareader;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,17 +39,11 @@ public class ViewMangaAdapter extends RecyclerView.Adapter<ViewMangaAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewMangaViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        String imageViewPath = context.getExternalCacheDir()+"/Pictures/"+viewMangas.get(position).getImg();
+            String image400ViewPath = context.getExternalCacheDir()+"/Pictures400/"+viewMangas.get(position).getImg();
+            String image800ViewPath = context.getExternalCacheDir()+"/Pictures800/"+viewMangas.get(position).getImg();
 
-        class MyThread extends Thread {
-            public void run() {
-                Bitmap imageView = ActivityManga.decodeSampledBitmapFromResource(imageViewPath, 400, 566);
-                Handler handler = new Handler(context.getMainLooper());
-                handler.post(() -> holder.mangaImage.setImageBitmap(imageView));
-            }
-        }
-        MyThread myThread = new MyThread();
-        myThread.start();
+            Handler handler = new Handler(context.getMainLooper());
+            handler.post(() -> holder.mangaImage.setImageURI(Uri.parse(image400ViewPath)));
 
             final float scale = context.getResources().getDisplayMetrics().density;
             int pixels = (int) (197 * scale + 0.5f);
@@ -64,7 +58,7 @@ public class ViewMangaAdapter extends RecyclerView.Adapter<ViewMangaAdapter.View
                 intent.putExtra("mangaTitle", viewMangas.get(position).getTitle());
                 intent.putExtra("mangaTitleOrig", viewMangas.get(position).getTitleOrig());
                 intent.putExtra("mangaDescription", viewMangas.get(position).getDescription());
-                intent.putExtra("mangaImageView", imageViewPath);
+                intent.putExtra("mangaImageView", image800ViewPath);
                 intent.putExtra("chapter1", viewMangas.get(position).getChapter1());
 
 

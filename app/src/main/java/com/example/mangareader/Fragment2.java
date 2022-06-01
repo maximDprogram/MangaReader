@@ -39,8 +39,9 @@ public class Fragment2 extends Fragment {
             for (int i=0;i< jsonArray.length();i++){
                 JSONObject userData=jsonArray.getJSONObject(i);
 
-                File pic = new File(requireActivity().getExternalCacheDir() + "/Pictures/"+userData.getString("img"));
-                if(pic.exists()){
+                File pic400 = new File(requireActivity().getExternalCacheDir() + "/Pictures400/"+userData.getString("img"));
+                File pic800 = new File(requireActivity().getExternalCacheDir() + "/Pictures800/"+userData.getString("img"));
+                if(pic400.exists() & pic800.exists()){
                     mangaList.add(new ViewManga(userData.getInt("id"),userData.getString("img"),userData.getString("title"),userData.getString("titleOrig"),userData.getString("description"),userData.getString("chapter1")));
                 }else{startErrorActivity();}
             }

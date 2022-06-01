@@ -8,8 +8,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -61,14 +59,14 @@ public class ActivityManga extends AppCompatActivity {
 
         Uri cbzUri = Uri.fromFile(file);
 
-        Bitmap mangaImageViewBm = decodeSampledBitmapFromResource(getIntent().getStringExtra("mangaImageView"), 800, 1133);
+        String mangaImageViewJp = getIntent().getStringExtra("mangaImageView");
 
         button.setMinWidth(pixels);
         button.setMaxWidth(pixels);
         button1.setMinWidth(pixels);
         button1.setMaxWidth(pixels);
 
-        mangaImageView.setImageBitmap(mangaImageViewBm);
+        mangaImageView.setImageURI(Uri.parse(mangaImageViewJp));
         mangaTitle.setText(getIntent().getStringExtra("mangaTitle"));
         mangaTitleOrig.setText(getIntent().getStringExtra("mangaTitleOrig"));
         textDescription.setText(getIntent().getStringExtra("mangaDescription"));
@@ -155,7 +153,7 @@ public class ActivityManga extends AppCompatActivity {
 
         boolean success = false;
         FTPClient ftp = new FTPClient();
-        ftp.setConnectTimeout(1000);
+        ftp.setConnectTimeout(100);
         ftp.setControlEncoding("UTF-8");
         try {
             int reply;
@@ -235,34 +233,6 @@ public class ActivityManga extends AppCompatActivity {
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-    }
-
-    public static Bitmap decodeSampledBitmapFromResource(String res, int reqWidth, int reqHeight) {
-
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(res, options);
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(res, options);
-    }
-
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int heightRatio = Math.round((float) height / (float) reqHeight);
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-
-            inSampleSize = Math.min(heightRatio, widthRatio);
-        }
-
-        return inSampleSize;
     }
 
     private void startDocumentActivity(Uri cbzUri){
